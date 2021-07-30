@@ -7,3 +7,87 @@ So here's how it goes. You just got back from the grocery story with a big long 
 Enter Shopper (working title), an app that makes it easy and fun to itemize and keep track of your grocery shopping expenses. Choose which store you went to, then add each item with a single click of a button. You can also create new buttons if it's an item you've never bought before, adjust the price if the item was on sale etc., and so on. If it's a bulk item, you click the button and then enter the amount; if it's a nonbulk item, you just click it. Once you've entered all your items, you click a checkout button, and your receipt is recorded.
 
 There's a lot more that you could do with this basic setup. You could, for instance, keep track of what's in your pantry, track usage and waste, get notified when you are running low on something, etc. But I will save all that for later iterations.
+
+# 7/30/21
+
+As is always the case, even building it ugly is hard. One especially tricky challenge is to make it so that the cart items organize themselves into like groups with a certain amount. Clicking on the cheese button three times should result in "3x Cheese," not "Cheese Cheese Cheese".
+
+The simple behavior that we see when we interact with online shopping carts in fact represents a rather complex logic that I should probably pilfer from MS's excellent React class. You never get anywhere without standing on someone else's shoulders.
+
+But I'm not just going to copy-paste it. If you're going to pilfer something, the least you can do is make a real effort to understand what your pilfering. I recall not fully understanding the code when I went through it the first time, so let's do that now.
+
+It's two files. The first, "cart-context", is just that - a context, created by React.createContext(). I am still shaky on the details of what this function does, but the details aren't important. What matters is what I do know: It takes as a parameter an object that will constitute the shared state of whatever components partake of it. And it returns a "context," about which we will say more later.
+
+This particular context-creating function takes as its argument an object with four named properties: an array, a number, and two functions. The array is empty, the number is zero, and the functions are empty. It is an extremely minimal piece of information. This is important to remember: the actual createContext() function does very little. It just *creates* the context. It doesn't really *do* anything with it.
+
+And I just remembered something really crucial, which I forgot until just now, which is that a context is a *component*. Its first letter is capitalized. It is a component. Specifically, it is a *wrapper* component. Its job is to wrap around other components in order to provide them with the context, using the <Context.Provider> syntax.
+
+In that spirit, let's dive into CartProvider.
+
+Starting at the bottom, with the return statement. We are indeed returning a context provider, namely the context we imported from the "cart-context" file. We are passing props.children into it, like you do. And, most importantly, we are providing it with one single prop, "value", set to the variable "cartContext" - note the lowercase first letter. This is NOT the component we have imported from our "cart-context" file. It is something else.
+
+What it is is an object that bears a striking resemblance to the object we passed into our createContext() function, with an array of items, a total, an add item function and a remove item function. The first two are properties of an object called cartState, and the last two are functions. All are declared earlier in this functional component, called CartProvider, that we are in.
+
+Now it's time to talk about useReducer, which appears at the beginning of the CartProvider function. It takes two arguments, a reducer function and a default state, and returns a two-item array containing the current state and a function to dispatch actions to the reducer. Woof! But the thing is, you just have to hear the words "reducer" and "dispatch" over and over, and eventually it starts to make sense.
+
+Let's jump up to the reducer function, because that's where the real meat is. This reducer, as written, is a big and rather ungainly cluster of if/else statements. But let's go through it, and maybe we can even refactor it as we go.
+
+The first thing to notice is that the function takes two arguments, a state and an action. A state is just an object and an action is also just an object. Specifically, in this case a state is an object with two properties: items, which is an array; and total amount, which is a number. And an action is also an object with two properties: type, which is a string, and payload, which is an item (i.e. object) in the case of "ADD", and an id (i.e. a number) in the case of "REMOVE". If you want to add an item, you need to add the whole item; but if you want to remove an item, you just need to know its id.
+
+Ok, let's suppose we dispatch an "ADD" action to our reducer. What happens?
+
+First, let's talk about the shape of the "item" object, which I have not pilfered for this app yet but probably will later. It has four properties: id (a number), name (a string), amount (a number), and price (a number).
+
+So, when we dispatch an "ADD" action, the first thing that happens is that we declare a variable called "updatedTotalAmount", which is just that. It's just the current total amount plus the item price times the item amount.
+
+Then we do a bit of trickery to find out if the item we are adding to the cart is already in the cart, like so: First, declare a variable called existingCartItemIndex, which calls the findIndex method on the array of existing items to find if there is an item within it whose id matches the id of the item we are trying to add. 
+
+The findIndex array method takes a function that goes through the array and tries to match every item. If it finds a match, it returns the index of the match. If it can't find a match, it returns -1.
+
+So we have this variable called existingCartItemIndex, which is either a valid index (i.e. a number from zero on up) or -1, which is not a valid index. This is actually a great teachable moment about the difference between JavaScript and Python, because in Python, -1 *is* a valid index, and what we are about to do would emphatically not work.
+
+So anyway, we have this variable called existingCartItemIndex, which is either a valid index or -1. What we do next is we declare another variable called existingCartItem (no Index), which is simply the item at the, if you like, existingCartItemIndex-th index of the items array that constitutes the centerpiece of our state.
+
+This is a classic bit of JavaScript cleverness. Because if existingCartItemIndex is a valid index, it will return an item, and if not, it will return undefined, which is falsy and can therefore be used, as we will in a moment, in a conditional statement.
+
+Finally, we declare two variables using the "let" keyword, which is a somewhat unusual sight in modern functional JavaScript but still certainly has its uses, as we shall see.
+
+So now we have an if/else statement using that variable existingCartItem, which might be an item (i.e. an object) and might be undefined. So if it's an item, that means the item we are trying to add already exists in the cart, and instead of adding it per se, we need to update the amount. And what we do in that case is set the updatedItem variable (which is NOT a const), using the spread operator, to an object that is equivalent to the existingCartItem object from earlier, with the amount property updated by taking the sum of the action item amount and the existing item amount. After we do that, we first set the updatedItems variable, also using the spread operator, equal to the current items array, and then set the item we are trying to update, using the existingCartItemIndex from earlier, to the updatedItem that we made above.
+
+So much for if the item is in the cart already. But if it's NOT, then it's a bit simpler. First we set updatedItem to the item we are passing in, and then setting updatedItems equal to the current items array with the new item concat-ed on. Of these two, I believe the first one may be unnecessary. Recall that this is someone else's code, and even the great MS makes mistakes sometimes.
+
+So after that if/else statement, we are left with one variable: the updatedItems, which is either our previous array with a new item added on, or our previous array with an existing item updated. We then return an object - the new state - which, like the old state, has two properties: a new array of items and a new total amount.
+
+And that's how you add an item! Now let's look at how you remove an item.
+
+A lot is the same, or at least similar. This time we start by finding the existingCartItemIndex, in more or less the same way, except that this time our payload is just the id rather than the whole item. Next we get the item with the index. This time it's called "existingItem" - inconsistent, but that's ok. And this time, we know it's going to exist, because you can't remove an item that doesn't exist. Then we get updatedTotalAmount, with a minus instead of a plus, and no times because you can add items up to five at a time but remove them only one at a time.
+
+Now we will declare updatedItems, again with let, and then get into an if/else statement.
+
+This if/else statement is different from the one before. When we were adding items, we needed to know if this item already existed in the cart, in order to know whether to add the item to the list or to update the amount of the existing item. This time, we need to know something related but different: we need to know whether or not the amount of the item is equal to 1. If it's 1, we will remove it, and if it's more than 1, we will update the amount. Then we will return the new state, just as above.
+
+My god! What seems simple and effortless to the user is so complicated for the developer. But still, I do understand this code, and am perfectly capable of writing something like this.
+
+There are a couple of things I want to drill down into about this particular example. Particularly I want to focus on findIndex and let. The reason we use let is, in both branches of the reducer function, so we can set the value of updatedItems in two steps: the first one sets it equal to the previous item array, and the second updates a specific value of that array. This is a difficult thing to do in one step.
+
+If I may, I would like to dwell on this a little.
+
+Let's think: could we do this another way, without findIndex and let?
+
+Our items are stored in an array. Maybe there could be another way of doing it, but let's keep it like that for now. Each item is an object, with an id, a name, a price and an amount. We receive a new item, which has all those just-mentioned properties.
+
+The tricky thing is that we are working with an array, in which items are stored in a certain order, but there is no way to predict that order. The order in which the items are stored in the array is determined entirely by the whims of the user. So we don't know where any given item is going to be in the array, but it matters.
+
+Modern JavaScript developers love the elegance of a one-liner, and feel like indexing into arrays with actual numerical indices is a relic of the C era. But in the face of such uncertainty as that of user-whim, we sometimes must reach for somewhat antique weapons.
+
+Very well. Now I understand fully and completely how this component works. It only took me roughly two hours! Now let's take a quick look at how it's implemented in MS's app, and then see about adding it to mine.
+
+It's not so complicated. First of all, it wraps the whole app, which means all the components in the app will have access to the context - which, let's recall, simply means the contents of the cart (an array of objects), the total of the cart (a number determined by that array of objects), and two functions, one to add items and another to remove them.
+
+So let's look at the Cart component, for instance. It starts by getting the context using the wonderful useContext() hook. Then it extracts from that context the total amount, which is a number, and whether or not the cart has items, which is a Boolean. Then we declare two handlers, one to remove an item and the other to add an item. These are just wrappers around the functions in the context, which both lead eventually to the big reducer that we just discussed.
+
+Then we create our cartItem list by mapping over the array of items and creating a <ul> element. The only thing I don't understand right now is the use of "bind" when passing the add and remove functions into the cartItem (which is another, purely presentational, component). I'll look into that right now and get back.
+
+After about 90 seconds, I'm not sure I can explain it as thoroughly as I have the rest of this application. All I can say is that it has to do with scope. It may not be worth digging into just yet.
+
+My job now is to replicate this logic, in a somewhat limited form, in my app. The first thing I should do, though, is separate out the components.
