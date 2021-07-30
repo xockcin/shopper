@@ -42,12 +42,42 @@ const cartList = cartItems.map(item => {
   );
 })
 
+
+  const ItemForm = () => {
+    const [name, setName] = useState("")
+    const [price, setPrice] = useState("")
+    return (
+      <form action="">
+        <label>
+          name:
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </label>
+        <label>
+          price: $
+          <input
+            type="number"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+            min="0.01"
+            step="0.01"
+          />
+        </label>
+        <input type="submit" value="Submit" />
+      </form>
+    );
+  };
+
 function App() {
+  const [marketItems, setMarketItems] = useState(mbItems)
   const [cartItems, setCartItems] = useState([])
 
   const handleAddToCart = (item) => {
     const currentItems = cartItems
-    setCartItems(cartItems.concat(item))
+    setCartItems(currentItems.concat(item))
   }
 
   const cartList = cartItems.map((item) => {
@@ -75,6 +105,7 @@ function App() {
     <div className="row">
       <div className="column">
         {itemList}
+        <ItemForm />
       </div>
       <div className="column">
         {cartList}
