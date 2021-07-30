@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 
-const ItemForm = () => {
+const ItemForm = (props) => {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   return (
-    <form action="">
+    <form>
       <label>
         name:
         <input
