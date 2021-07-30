@@ -1,78 +1,25 @@
 import React, {useState} from 'react';
 import './App.css';
 import ItemForm from './components/ItemForm'
+import ItemList from './components/ItemList'
+import Cart from './components/Cart'
+import CartProvider from './store/CartProvider'
 
-const mbItems = [
-  {
-    name: "Cabot Greek Yogurt",
-    price: 3.69
-  },
-  {
-    name: "Cabot Cheddar Cheese",
-    price: 8.99
-  },
-  {
-    name: "Nellie's Eggs",
-    price: 3.69
-  },
-  {
-    name: "Teddie Peanut Butter",
-    price: 2.99
-  }
-]
-
-const cartItems = []
-
-const cartList = cartItems.map(item => {
-  return (
-    <div className="border">
-      <h1>
-        {item.name} - {item.price}
-      </h1>
-    </div>
-  );
-})
 
 function App() {
-  const [marketItems, setMarketItems] = useState(mbItems)
-  const [cartItems, setCartItems] = useState([])
-
-  const handleAddToCart = (item) => {
-    const currentItems = cartItems
-    setCartItems(currentItems.concat(item))
-  }
-
-  const cartList = cartItems.map((item) => {
-    return (
-      <div className="border">
-        <h1>
-          {item.name} - {item.price}
-        </h1>
-      </div>
-    );
-  });
-
-  const itemList = mbItems.map((item) => {
-    return (
-      <div className="border" onClick={() => handleAddToCart(item)}>
-        <h1>
-          {item.name} - {item.price}
-          <button>add</button>
-        </h1>
-      </div>
-    );
-  });
-
   return (
-    <div className="row">
-      <div className="column">
-        {itemList}
-        <ItemForm />
+    <CartProvider>
+      <div className="row">
+        <div className="column">
+          <h1>items</h1>
+          <ItemList />
+        </div>
+        <div className="column">
+          <h1>cart</h1>
+          <Cart />
+        </div>
       </div>
-      <div className="column">
-        {cartList}
-      </div>
-    </div>
+    </CartProvider>
   );
 }
 
