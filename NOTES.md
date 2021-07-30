@@ -91,3 +91,23 @@ Then we create our cartItem list by mapping over the array of items and creating
 After about 90 seconds, I'm not sure I can explain it as thoroughly as I have the rest of this application. All I can say is that it has to do with scope. It may not be worth digging into just yet.
 
 My job now is to replicate this logic, in a somewhat limited form, in my app. The first thing I should do, though, is separate out the components.
+
+While separating out the ItemList component, I realized that I'm not going to get very far if I don't start using my context as soon as possible. The context is the cart, and the cart is the app, so let's get that up and running ASAP.
+
+In fact, I think the best idea at this point would be to clear out my App component and start over. I'll keep my ItemList and ItemForm components, but I need to rebuild the whole thing with the CartProvider in mind. Let's do that.
+
+OK, everything is gone now. All that's left are the two columns that constitute my minimal design. The left column will contain the items you can select from, the right will contain the cart.
+
+Now I have wrapped the whole app in the CartProvider component. That way the items column will be able to add to it and the cart component will show it. Note that we are not *using* the context here yet - we are just *providing* it. We will use it next.
+
+Now let's go to ItemList. This is a very simple component that contains the dummy data we are using for our app. Here, each item just has a list and a price, no id. Let's change that - let's give it an id.
+
+OK, now they all have id's, which are just numbers.
+
+OK, now there is a handleAddToCart function attached to the button. It's simpler than the one in MS's app, because I'm not worrying about amount. You can only add items one at a time.
+
+Now let's do the cart.
+
+Ok, now it works. Super ugly, but it does exactly what I would like it to do.
+
+Now the next challenge is to make the form work, which will be tricky, as MS himself has indicated. I think the thing to do will probably be to watch his lesson on forms, and why they're tricky, before I try to implement my own form.
