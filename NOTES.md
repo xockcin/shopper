@@ -111,3 +111,13 @@ Now let's do the cart.
 Ok, now it works. Super ugly, but it does exactly what I would like it to do.
 
 Now the next challenge is to make the form work, which will be tricky, as MS himself has indicated. I think the thing to do will probably be to watch his lesson on forms, and why they're tricky, before I try to implement my own form.
+
+# 8/4/21
+
+I'm getting to a point where I really want to get this done. The next thing I need to do is make it so you can add items with the form. No validation or anything.
+
+But here's the thing: If you can add items to the market, then market items are now part of the state, and there's a lot more I have to do than just make the form work. Ideally, what I should do is hook it up to a backend, but I will start just by creating a context.
+
+The first thing I did was to copy and paste cart-context.js into a new file called market-context.js, which will be similar but not the same. The market context does not need a total value, just an item array and methods for adding and removing items. Then I will model the Market Provider on the Cart Provider.
+
+It's going well so far, but I just realized that I'm going to end up with two provider wrappers. I don't want to end up in the Wrapper Valley of Doom! I suppose that's one reason why people use Redux.

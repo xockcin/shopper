@@ -1,10 +1,22 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
+import MarketContext from "../store/market-context";
 
 const ItemForm = (props) => {
+  const marketCtx = useContext(MarketContext)
+
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
+
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    marketCtx.addItem({
+      name,
+      price: +price
+    })
+  }
+
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <label>
         name:
         <input

@@ -1,37 +1,17 @@
 import React, { useContext } from "react";
 import CartContext from '../store/cart-context'
-
-const mbItems = [
-  {
-    id: 1,
-    name: "Cabot Greek Yogurt",
-    price: 3.69,
-  },
-  {
-    id: 2,
-    name: "Cabot Cheddar Cheese",
-    price: 8.99,
-  },
-  {
-    id: 3,
-    name: "Nellie's Eggs",
-    price: 3.69,
-  },
-  {
-    id: 4,
-    name: "Teddie Peanut Butter",
-    price: 2.99,
-  },
-];
+import MarketContext from '../store/market-context'
 
 const ItemList = () => {
   const cartCtx = useContext(CartContext)
+  const marketCtx = useContext(MarketContext)
+  const marketItems = marketCtx.items
 
   const handleAddToCart = (item) => {
     cartCtx.addItem({...item, amount: 1})
   }
 
-  const itemList = mbItems.map((item) => {
+  const itemList = marketItems.map((item) => {
     return (
       <div className="border">
         <h1>
