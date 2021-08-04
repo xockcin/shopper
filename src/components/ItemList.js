@@ -15,7 +15,7 @@ const ItemList = () => {
     return (
       <div className="border">
         <h1>
-          {item.name} - {item.price}
+          {item.name} - {item.price.toFixed(2)}
           <button onClick={() => handleAddToCart(item)}>add</button>
         </h1>
       </div>
