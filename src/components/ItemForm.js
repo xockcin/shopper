@@ -9,10 +9,12 @@ const ItemForm = (props) => {
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    marketCtx.addItem({
-      name,
-      price: +price
+    if (name && price) {
+      marketCtx.addItem({
+        name,
+        price: +price
     })
+  }
   }
 
   return (
