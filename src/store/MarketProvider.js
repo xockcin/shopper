@@ -10,9 +10,9 @@ const defaultMarketState = {
 const marketReducer = (state, action) => {
   switch (action.type) {
     case "ADD":
-      return { items: state.items.concat(action.item) };
+      return { items: state.items.concat(action.item) }
     case "REMOVE":
-      return { items: state.items.filter((item) => item !== action.item) };
+      return { items: state.items.filter((item) => item !== action.item) }
     default:
       return state
   }

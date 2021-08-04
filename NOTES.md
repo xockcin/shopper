@@ -121,3 +121,19 @@ But here's the thing: If you can add items to the market, then market items are 
 The first thing I did was to copy and paste cart-context.js into a new file called market-context.js, which will be similar but not the same. The market context does not need a total value, just an item array and methods for adding and removing items. Then I will model the Market Provider on the Cart Provider.
 
 It's going well so far, but I just realized that I'm going to end up with two provider wrappers. I don't want to end up in the Wrapper Valley of Doom! I suppose that's one reason why people use Redux.
+
+Now it works!
+
+Now I should be able to remove the item from the market list. Ultimately the best solution would be to let people edit the item, or be able to select from multiple possible prices, but I can do that later.
+
+Ok, now the tricky thing is that, if I'm going to remove the market items, then they need to have ids. The hard-coded ones have ids, of course, but if I'm going to make it so that people can add their own custom items, I'll need to add a feature to give the items ids automatically.
+
+Actually, I'm thinking it might be easier to just go ahead and implement market item editing.
+
+So what that would look like is another form, like the ItemAdd form (which, I should call it that, now that there will be two item forms), which will appear in the space of the item when you click the edit button.
+
+I suppose the best way to do it would be simply to add another action type to my reducer.
+
+I'm realizing this is actually kind of tricky. Because what the action creator needs to do is return a new version of the items array with one of its values updated. The best way might be with map. But I also need to figure out what sort of payload I'm passing into the function. All surprisingly complicated!
+
+And for something that is not a core feature. I have barely even begun to think about the actual meat of the project, which is the part when you save use the data contained in the itemized receipts. I need to take a break - will come back to this sometime soon.
