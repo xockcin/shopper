@@ -151,3 +151,5 @@ For now, I think the next step on this project is to create a separate screen in
 But before I do that, I should go back to that Udemy course and review React Router.
 
 Actually, I think I should start my backend journey by going back to the section of the Udemy class about API calls and wiring my app up to Firebase. Doing it now.
+
+Actually, I don't need to watch the class again. I know how to do this. Let's start by going to my Firebase account and getting the API keys.

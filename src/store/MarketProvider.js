@@ -3,6 +3,8 @@ import {mbItems} from "../shared/items"
 
 import MarketContext from "./market-context";
 
+const url = "https://shopper-12758-default-rtdb.firebaseio.com/"
+
 const defaultMarketState = {
   items: mbItems
 }
