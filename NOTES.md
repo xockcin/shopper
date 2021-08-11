@@ -149,3 +149,5 @@ My plan for getting backend programming to click for me is a bit odd - I want to
 For now, I think the next step on this project is to create a separate screen in which the user can view their purchased items. First it will just be receipts, but later it can expand into other views. Views, that's the word - I need to make views.
 
 But before I do that, I should go back to that Udemy course and review React Router.
+
+Actually, I think I should start my backend journey by going back to the section of the Udemy class about API calls and wiring my app up to Firebase. Doing it now.
