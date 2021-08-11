@@ -137,3 +137,15 @@ I suppose the best way to do it would be simply to add another action type to my
 I'm realizing this is actually kind of tricky. Because what the action creator needs to do is return a new version of the items array with one of its values updated. The best way might be with map. But I also need to figure out what sort of payload I'm passing into the function. All surprisingly complicated!
 
 And for something that is not a core feature. I have barely even begun to think about the actual meat of the project, which is the part when you save use the data contained in the itemized receipts. I need to take a break - will come back to this sometime soon.
+
+# 8/11/21
+
+It's been a week - seems like an eternity. This app can already do most of the basics. You can add an item. You can't delete an item, but then again why would you want to? There's no backend yet, but that's okay. You can both add and subtract items to and from the cart. That's pretty much it. No pictures. It doesn't look nice it all, but that can come later. You can't edit an item, which is kind of a problem and something I should implement, but you know, whatever.
+
+The main thing I need, of course, is a backend. I still feel sort of terrified of Node after the woefully inadequate preparation I received in the final four weeks of my bootcamp, but that's dumb. I need to bite the bullet and get on with it. As I have become fond of saying - what would a crazy person do?
+
+My plan for getting backend programming to click for me is a bit odd - I want to build a project for Arduino using aWOT, a library for hosting a RESTful server on an Arduino, modeled on Express. Perhaps not that useful - the pros all say that the Arduino platform itself is only for novices and hobbyists, of which I admittedly am one. But that will be a project for another repo - namely Link-n-Load, which I created last week and is still empty.
+
+For now, I think the next step on this project is to create a separate screen in which the user can view their purchased items. First it will just be receipts, but later it can expand into other views. Views, that's the word - I need to make views.
+
+But before I do that, I should go back to that Udemy course and review React Router.
