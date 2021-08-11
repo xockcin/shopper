@@ -153,3 +153,9 @@ But before I do that, I should go back to that Udemy course and review React Rou
 Actually, I think I should start my backend journey by going back to the section of the Udemy class about API calls and wiring my app up to Firebase. Doing it now.
 
 Actually, I don't need to watch the class again. I know how to do this. Let's start by going to my Firebase account and getting the API keys.
+
+There's no keys, per se - it's just a URL.
+
+The data I will be pulling from Firebase is the list of items in the market, which lives in the MarketProvider component, which is currently getting its data from the static JSON file in the shared folder. So I will build my data-pulling function in the MarketProvider component, I suppose.
+
+I changed my mind - I'm tired and it's hot, and I just don't feel like dealing with this crap right now. Maybe tomorrow. For now I'm going to call it a day on this project and work on something else.
